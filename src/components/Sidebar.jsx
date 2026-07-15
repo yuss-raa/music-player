@@ -1,159 +1,69 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCompass, faHeadphones, faHeart, faHistory, faList, faPlayCircle } from '@fortawesome/free-solid-svg-icons';
-import { faMusic } from '@fortawesome/free-solid-svg-icons';
-import { faChartLine } from '@fortawesome/free-solid-svg-icons';
-import { faUserFriends } from '@fortawesome/free-solid-svg-icons';
-import { faBroadcastTower } from '@fortawesome/free-solid-svg-icons';
-
+import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import SidebarLink from './SidebarLink';
+import { browseMusicLinks, yourMusicLinks, playlistLinks } from '../data/musicData';
+import { usePlayer } from '../context/PlayerContext';
 
 const Sidebar = () => {
-  return (
-    <div className="bg-gradient-to-t from-customWhite via-customGray  to-customWhite  fixed top-0 left-0 w-[16%] h-full">
-      <div className="flex ml-4">
-        <img src="/logo.png" alt="Logo" className="w-24 h-16 mt-4 mr-4 lg:block hidden"/>
-        <h2 className="mt-8  text-customBlue-1 text-xl font-bold">UI KIT</h2>
-      </div>
-      <h3 className="mt-4 ml-8 font-semibold text-gray-400 text-sm lg:block hidden">BROWSE MUSIC</h3>
+  const [open, setOpen] = useState(false);
+  const { activeSection, setActiveSection } = usePlayer();
 
-      <ul className="mt-4 ml-8 space-y-2">
-
-      <li className="flex items-center space-x-2 group hover:text-customBlue-1">
-      <div className="absolute left-0 w-1 h-8 bg-customBlue-1 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <div className="flex items-center space-x-2">
-          <FontAwesomeIcon
-            icon={faCompass}
-            className="text-gray-400 group-hover:text-customBlue-1"
+  const Section = ({ title, links }) => (
+    <>
+      <h3 className="mt-5 ml-2 font-bold text-gray-400 text-xs tracking-wider">{title}</h3>
+      <ul className="mt-2 space-y-1">
+        {links.map((link) => (
+          <SidebarLink
+            key={link.id}
+            label={link.label}
+            icon={link.icon}
+            active={activeSection === link.id}
+            onClick={() => {
+              setActiveSection(link.id);
+              setOpen(false);
+            }}
           />
-          <span className="text-gray-400 hover:text-customBlue-1 font-semibold text-md lg:block hidden">Discover</span>
-        </div>
-      </li>
-
-      <li className="flex items-center space-x-2 group hover:text-customBlue-1">
-      <div className="absolute left-0 w-1 h-8 bg-customBlue-1 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <div className="flex items-center space-x-2">
-          <FontAwesomeIcon
-            icon={faMusic}
-            className="text-gray-400 group-hover:text-customBlue-1"
-          />
-          <span className="text-gray-400 hover:text-customBlue-1 font-semibold text-md lg:block hidden">Genre</span>
-        </div>
-      </li>
-
-      <li className="flex items-center space-x-2 group hover:text-customBlue-1">
-      <div className="absolute left-0 w-1 h-8 bg-customBlue-1 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <div className="flex items-center space-x-2">
-          <FontAwesomeIcon
-            icon={faChartLine}
-            className="text-gray-400 group-hover:text-customBlue-1"
-          />
-          <span className="text-gray-400 hover:text-customBlue-1 font-semibold text-md lg:block hidden">Top Charts</span>
-        </div>
-      </li>
-
-      <li className="flex items-center space-x-2 group hover:text-customBlue-1">
-      <div className="absolute left-0 w-1 h-8 bg-customBlue-1 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <div className="flex items-center space-x-2">
-          <FontAwesomeIcon
-            icon={faUserFriends}
-            className="text-gray-400 group-hover:text-customBlue-1"
-          />
-          <span className="text-gray-400 hover:text-customBlue-1 font-semibold text-md lg:block hidden">Collabs</span>
-        </div>
-      </li>
-
-      <li className="flex items-center space-x-2 group hover:text-customBlue-1">
-      <div className="absolute left-0 w-1 h-8 bg-customBlue-1 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <div className="flex items-center space-x-2">
-          <FontAwesomeIcon
-            icon={faHeadphones}
-            className="text-gray-400 group-hover:text-customBlue-1"
-          />
-          <span className="text-gray-400 hover:text-customBlue-1 font-semibold text-md lg:block hidden">Free Music</span>
-        </div>
-      </li>
-
-      <li className="flex items-center space-x-2 group hover:text-customBlue-1">
-      <div className="absolute left-0 w-1 h-8 bg-customBlue-1 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <div className="flex items-center space-x-2">
-          <FontAwesomeIcon
-            icon={faBroadcastTower}
-            className="text-gray-400 group-hover:text-customBlue-1"
-          />
-          <span className="text-gray-400 hover:text-customBlue-1 font-semibold text-md lg:block hidden">Stations</span>
-        </div>
-      </li>
-      
+        ))}
       </ul>
+    </>
+  );
 
-      <h3 className="mt-4 ml-8 font-semibold text-gray-400 text-sm lg:block hidden">YOUR MUSIC</h3>
+  return (
+    <>
+      {/* mobile top bar */}
+      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-white z-30 flex items-center justify-between px-4 shadow">
+        <h2 className="text-blue-600 text-lg font-bold">Music Player</h2>
+        <button aria-label="Open menu" onClick={() => setOpen(true)}>
+          <FontAwesomeIcon icon={faBars} className="text-xl text-gray-700" />
+        </button>
+      </div>
 
-<ul className="mt-4 ml-8 space-y-2">
+      {/* overlay */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setOpen(false)}
+        />
+      )}
 
-<li className="flex items-center space-x-2 group hover:text-customBlue-1">
-<div className="absolute left-0 w-1 h-8 bg-customBlue-1 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-  <div className="flex items-center space-x-2">
-    <FontAwesomeIcon
-      icon={faHeart}
-      className="text-gray-400 group-hover:text-customBlue-1"
-    />
-    <span className="text-gray-400 hover:text-customBlue-1 font-semibold text-md lg:block hidden">Favourites</span>
-  </div>
-</li>
+      <aside
+        className={`bg-white fixed top-0 left-0 h-full overflow-y-auto z-50 w-72 px-4 pb-8 shadow-xl
+          transition-transform duration-300 md:translate-x-0 md:shadow-none md:w-[18%] md:min-w-[220px]
+          ${open ? 'translate-x-0' : '-translate-x-full'}`}
+      >
+        <div className="flex items-center justify-between pt-4">
+          <h2 className="text-blue-600 text-xl font-bold">Music Player</h2>
+          <button aria-label="Close menu" className="md:hidden" onClick={() => setOpen(false)}>
+            <FontAwesomeIcon icon={faTimes} className="text-xl text-gray-700" />
+          </button>
+        </div>
 
-<li className="flex items-center space-x-2 group hover:text-customBlue-1">
-<div className="absolute left-0 w-1 h-8 bg-customBlue-1 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-  <div className="flex items-center space-x-2">
-    <FontAwesomeIcon
-      icon={faHistory}
-      className="text-gray-400 group-hover:text-customBlue-1"
-    />
-    <span className="text-gray-400 hover:text-customBlue-1 font-semibold text-md lg:block hidden">History</span>
-  </div>
-</li>
-
-</ul>
-
-<h3 className="mt-4 ml-8 font-semibold text-gray-400 text-sm lg:block hidden">YOUR PLAYLISTS</h3>
-
-<ul className="mt-4 ml-8 space-y-2">
-
-<li className="flex items-center space-x-2 group hover:text-customBlue-1">
-<div className="absolute left-0 w-1 h-8 bg-customBlue-1 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-  <div className="flex items-center space-x-2">
-    <FontAwesomeIcon
-      icon={faPlayCircle}
-      className="text-gray-400 group-hover:text-customBlue-1"
-    />
-    <span className="text-gray-400 hover:text-customBlue-1 font-semibold text-md lg:block hidden">Public Playlist</span>
-  </div>
-</li>
-
-<li className="flex items-center space-x-2 group hover:text-customBlue-1">
-<div className="absolute left-0 w-1 h-8 bg-customBlue-1 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-  <div className="flex items-center space-x-2">
-    <FontAwesomeIcon
-      icon={faMusic}
-      className="text-gray-400 group-hover:text-customBlue-1"
-    />
-    <span className="text-gray-400 hover:text-customBlue-1 font-semibold text-md lg:block hidden">Purchased</span>
-  </div>
-</li>
-
-<li className="flex items-center space-x-2 group hover:text-customBlue-1">
-<div className="absolute left-0 w-1 h-8 bg-customBlue-1 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-  <div className="flex items-center space-x-2">
-    <FontAwesomeIcon
-      icon={faList}
-      className="text-gray-400 group-hover:text-customBlue-1"
-    />
-    <span className="text-gray-400 hover:text-customBlue-1 font-semibold text-md lg:block hidden">My First Playlists</span>
-  </div>
-</li>
-
-</ul>
-
-    </div>
+        <Section title="BROWSE MUSIC" links={browseMusicLinks} />
+        <Section title="YOUR MUSIC" links={yourMusicLinks} />
+        <Section title="YOUR PLAYLISTS" links={playlistLinks} />
+      </aside>
+    </>
   );
 };
 
