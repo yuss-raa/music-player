@@ -11,9 +11,9 @@ A React music player with a clean, responsive interface where you can browse son
 
 ## 🌐 Live Demo 
 
-[Live Demo](https://music-player-zeta-jet.vercel.app/)  
+[View Live here](https://music-player-zeta-jet.vercel.app/)  
 
-
+<img width="1920" height="1022" alt="Screenshot (382)" src="https://github.com/user-attachments/assets/45c9162c-ec21-4b1d-8ee5-9faef333a28a" />
  
 ## 📦 Installation
  
